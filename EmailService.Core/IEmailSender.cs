@@ -6,6 +6,6 @@ namespace EmailService.Core
 {
     public interface IEmailSender
     {
-        Task<bool> SendEmail(EmailMessage message);
+        Task<SendEmailResult> SendEmail(EmailMessage message);
     }
 }

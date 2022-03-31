@@ -1,0 +1,66 @@
+﻿using Scriban;
+using System;
+using System.Collections.Generic;
+using System.IO;
+using System.Linq;
+using System.Net.Mail;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace ReadMyEmailBox
+{
+    public class NrrcSmtpEmailSend
+    {
+        const string SmtpServerIp = "10.11.138.14";
+        const string FromEmail = "ibrahim@nrrc.gov.sa";//يظهر للمستلم وكأنه الراسل
+        const string FromName = "Ibrahim Kholief";//يظهر للمستلم كإسم 
+        const string ToEmail = "ikhalif.nrrc@gmail.com";
+        //const string ToEmail = "ikhalif@nrrc.gov.sa";
+        const string emailTemplatePath = "../../../EmailTemplate.html";
+        public void Execute()
+        {
+            //read template and fill it
+            var html = File.ReadAllText(emailTemplatePath);
+            var template = Template.Parse(html);
+            var mailBody = template.Render(new
+            {
+                ArabicName = "إبراهيم رجب محمد خليف",
+                EnglishName = "Ibrahim Ragab Mohamed Kholief",
+                EnglishLessonName = "Securing Your Mobile Phone (Part 1)",
+                ArabicLessonName = "تأمين هاتفك الجوال الجزء الأول",
+                Date = "29/3/2022",
+                ID = "8276515",
+            }, m => m.Name);
+
+            try
+            {
+                using (var sc = new SmtpClient(SmtpServerIp)
+                {
+                    Port = 25,
+                    EnableSsl = false,
+                })
+                {
+
+
+                    var msg = new MailMessage
+                    {
+                        IsBodyHtml = true,
+                        Body = mailBody,
+                        From = new MailAddress(FromEmail, FromName),
+                        Subject = $"Email Template Test Send",
+                    };
+                    //msg.To.Add(ToEmail);
+                    msg.To.Add("ikhalif@nrrc.gov.sa");
+                    //msg.To.Add("dalghushayan@nrrc.gov.sa");
+                    //msg.To.Add("talshahrani@nrrc.gov.sa");
+                    msg.Bcc.Add(ToEmail);
+                    sc.Send(msg);
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine("An error occured :" + ex.Message);
+            }
+        }
+    }
+}
