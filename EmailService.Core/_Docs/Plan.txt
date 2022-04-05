@@ -1,0 +1,19 @@
+﻿Sending Email Service
+	* Senders Data
+	* Email Template 
+		* Add New Template
+		* Copy a Template
+		* Update a Template
+	* Send to Recepinats
+	* Each Email Template Has
+		* Unique English Name
+		* Title
+		* Data Defenetion
+		* HTML Content
+	* Sending Email Requires 
+		* Template Id
+		* Data to use in filling template
+		* Recepiants Emails
+	* Data is a free JSON
+	* Mail server settings
+	* Permissions
